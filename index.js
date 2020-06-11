@@ -3,18 +3,25 @@
 require("dotenv").config()
 const Discord = require("discord.js")
 const client = new Discord.Client()
-client.on("ready", () => {
+const prefix = '!'; // I think we can move this to the config file later. I'm not quite sure how that works atm.
+
+client.once("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
 })
 
 client.on("message", msg => {
-  var tmp = msg.content.toUpperCase() // Converts most recent message to uppercase
+  if (!msg.content.startsWith(prefix) || msg.author.bot) return; //If the message either doesn't start with the prefix or was sent by a bot, exit early
+  
+  const args = msg.content.slice(prefix.length).split(/ +/); //Creates an "args" variable that slices off the prefic entirely and then splits it into an array by spaces
+  const command = args.shift().toLowerCase(); // Converts command to lowercase
+  //var tmp = msg.content.toUpperCase() // Converts most recent message to uppercase
   var authorRole = msg.member.roles.highest.name // Gets the highest server role of the person who initiated the command
   var author = msg.member.id // Gets their id
   var msgAuthor = msg.member // Gets their member profile
   var rollTaker = "162997214199676928"
   var students = []
-  if (tmp === "!ROLL" && (authorRole === "@the_boys" || author === "162997214199676928" || author === "172143655518208000")) {
+  //if (tmp === "!ROLL" && (authorRole === "@the_boys" || author === "162997214199676928" || author === "172143655518208000")) { //This is for perms on specific people
+  if (command === 'roll') {
     msg.channel.send("React to this!")
     .then(function (botMsg) {
       botMsg.react('✋') // Reacts to above message ^ <-[("React to this!")]

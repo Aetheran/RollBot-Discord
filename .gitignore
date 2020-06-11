@@ -2,3 +2,4 @@
 .vscode/
 .dev
 .env
+config.json
